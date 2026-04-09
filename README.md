@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Kivo - Herramientas para Freelancers
 
-## Getting Started
+Plataforma web con herramientas útiles para freelancers en América Latina.
 
-First, run the development server:
+## Características Actuales
 
+✅ **Página de Inicio** - Muestra todas las herramientas disponibles
+✅ **Calculadora de Pagos** - Calcula comisiones de PayPal, Stripe, Wise por país
+✅ **Panel Admin** - Gestiona comisiones (agregar, editar, eliminar)
+✅ **Responsive Design** - Funciona en mobile, tablet y desktop
+
+## Requisitos Previos
+
+- Node.js 18+ 
+- npm o yarn
+- Cuenta Supabase (para la base de datos)
+
+## Instalación y Setup
+
+### 1. Acceder al proyecto
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cd /Users/webster/Documents/Claude/Projects/kivo/kivo-web
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Instalar dependencias
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Configurar Variables de Entorno
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Copia el archivo `.env.example` a `.env.local`:
+```bash
+cp .env.example .env.local
+```
 
-## Learn More
+**IMPORTANTE**: Obtén tus credenciales de Supabase:
+1. Ve a https://supabase.com
+2. Crea un proyecto nuevo
+3. Ve a Settings → API
+4. Copia `Project URL` y `anon public key`
+5. Pega en `.env.local`
 
-To learn more about Next.js, take a look at the following resources:
+## Ejecutar el Proyecto
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Desarrollo
+```bash
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Luego abre http://localhost:3000 en tu navegador.
 
-## Deploy on Vercel
+### Producción
+```bash
+npm run build
+npm run start
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Rutas Disponibles
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `/` - Página de inicio
+- `/herramientas` - Listado de herramientas
+- `/calculadora-pagos` - Calculadora de pagos (herramienta principal)
+- `/admin` - Panel admin (protegido con contraseña)
+
+## Panel Admin
+
+### Acceso
+- URL: http://localhost:3000/admin
+- Contraseña: `898693510Webster`
+
+### Funcionalidades
+- Ver todas las comisiones
+- Agregar nuevas comisiones
+- Editar comisiones existentes
+- Eliminar comisiones
+
+## Próximas Fases
+
+- Integración con Supabase (base de datos)
+- Integración con Google AdSense
+- Más herramientas (cotizaciones, precios, etc.)
+- Más países de América Latina
+- Despliegue en Vercel
+
+## Contacto
+
+Para preguntas o sugerencias sobre Kivo.
+
+---
+
+**Nota**: Los datos de comisiones en esta versión inicial son estimados. Verifica las tasas actuales de cada plataforma antes de usar en producción.
