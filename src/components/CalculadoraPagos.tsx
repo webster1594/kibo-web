@@ -102,30 +102,20 @@ export default function CalculadoraPagos() {
       {/* Blob gigante + calculadora encima */}
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-4 pb-8">
 
-        {/* Blob de fondo — gigante */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          {/* Mobile */}
+        {/* Personaje principal encima de la card */}
+        <div className="flex justify-center -mb-6 relative z-20">
           <Image
-            src="/assets/blob-movil.svg"
-            alt=""
-            width={600}
-            height={600}
-            className="sm:hidden w-[92vw] h-auto"
-            priority
-          />
-          {/* Desktop */}
-          <Image
-            src="/assets/blob-web.svg"
-            alt=""
-            width={720}
-            height={720}
-            className="hidden sm:block w-[75vw] max-w-[700px] h-auto"
+            src="/assets/personaje principal.svg"
+            alt="Personaje Kivo"
+            width={140}
+            height={140}
+            className="w-28 sm:w-36 h-auto drop-shadow-lg"
             priority
           />
         </div>
 
-        {/* Calculadora — encima del blob */}
-        <div className="relative z-10 w-full max-w-md space-y-4 pt-16 sm:pt-20">
+        {/* Calculadora */}
+        <div className="relative z-10 w-full max-w-md space-y-4">
 
           {/* Selectores país / plataforma */}
           <div className="grid grid-cols-2 gap-3">
