@@ -104,12 +104,22 @@ export default function CalculadoraPagos() {
 
         {/* Blob de fondo — gigante */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          {/* Mobile */}
           <Image
-            src="/assets/calculadora de pagos.svg"
+            src="/assets/blob-movil.svg"
             alt=""
-            width={700}
-            height={700}
-            className="w-[85vw] max-w-[620px] sm:max-w-[680px] h-auto opacity-100"
+            width={600}
+            height={600}
+            className="sm:hidden w-[92vw] h-auto"
+            priority
+          />
+          {/* Desktop */}
+          <Image
+            src="/assets/blob-web.svg"
+            alt=""
+            width={720}
+            height={720}
+            className="hidden sm:block w-[75vw] max-w-[700px] h-auto"
             priority
           />
         </div>
