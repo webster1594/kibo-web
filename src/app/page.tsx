@@ -4,66 +4,78 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect, useRef } from 'react';
 
-// Cada ícono tiene su propia órbita: radio, velocidad, fase inicial
+// Posición fija (% de pantalla) + parámetros de oscilación independientes para X e Y
 const ICONS = [
-  { src: '/assets/calculadora de pagos.svg',    alt: 'Calculadora',  size: 58, radius: 160, speed: 0.0004, phase: 0 },
-  { src: '/assets/creador de cotizaciones.svg', alt: 'Cotizaciones',  size: 48, radius: 140, speed: 0.0006, phase: Math.PI * 0.4 },
-  { src: '/assets/calculadora de precios.svg',  alt: 'Precios',       size: 52, radius: 170, speed: 0.0005, phase: Math.PI * 0.8 },
-  { src: '/assets/convertidor de archivos.svg', alt: 'Archivos',      size: 44, radius: 145, speed: 0.00045, phase: Math.PI * 1.3 },
-  { src: '/assets/buscador de clientes.svg',    alt: 'Clientes',      size: 54, radius: 155, speed: 0.00055, phase: Math.PI * 1.7 },
+  {
+    src: '/assets/calculadora de pagos.svg', alt: 'Calculadora', size: 70,
+    baseX: 10, baseY: 18,
+    ampX: 8, ampY: 10, freqX: 0.0008, freqY: 0.0006, phaseX: 0, phaseY: 1.2,
+  },
+  {
+    src: '/assets/creador de cotizaciones.svg', alt: 'Cotizaciones', size: 60,
+    baseX: 78, baseY: 12,
+    ampX: 10, ampY: 8, freqX: 0.0007, freqY: 0.0009, phaseX: 2.1, phaseY: 0.5,
+  },
+  {
+    src: '/assets/calculadora de precios.svg', alt: 'Precios', size: 65,
+    baseX: 84, baseY: 62,
+    ampX: 9, ampY: 12, freqX: 0.0006, freqY: 0.0007, phaseX: 1.0, phaseY: 2.8,
+  },
+  {
+    src: '/assets/convertidor de archivos.svg', alt: 'Archivos', size: 58,
+    baseX: 8, baseY: 68,
+    ampX: 11, ampY: 9, freqX: 0.0009, freqY: 0.0005, phaseX: 3.5, phaseY: 1.8,
+  },
+  {
+    src: '/assets/buscador de clientes.svg', alt: 'Clientes', size: 64,
+    baseX: 50, baseY: 82,
+    ampX: 8, ampY: 11, freqX: 0.0005, freqY: 0.0008, phaseX: 1.7, phaseY: 0.3,
+  },
 ];
 
-const REPEL_RADIUS = 120; // px — distancia a la que el mouse repele
-const REPEL_STRENGTH = 40; // cuánto se alejan
+const REPEL_RADIUS = 100;
+const REPEL_STRENGTH = 35;
 
 export default function Home() {
-  const containerRef = useRef<HTMLDivElement>(null);
   const iconRefs = useRef<(HTMLDivElement | null)[]>([]);
   const mouse = useRef({ x: -9999, y: -9999 });
 
   useEffect(() => {
-    const onMouseMove = (e: MouseEvent) => {
-      mouse.current = { x: e.clientX, y: e.clientY };
-    };
-    const onMouseLeave = () => {
-      mouse.current = { x: -9999, y: -9999 };
-    };
+    const onMouseMove = (e: MouseEvent) => { mouse.current = { x: e.clientX, y: e.clientY }; };
+    const onMouseLeave = () => { mouse.current = { x: -9999, y: -9999 }; };
     window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('mouseleave', onMouseLeave);
 
     let raf: number;
     const loop = (t: number) => {
-      const container = containerRef.current;
-      if (!container) { raf = requestAnimationFrame(loop); return; }
-
-      const rect = container.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-
       ICONS.forEach((icon, i) => {
         const el = iconRefs.current[i];
         if (!el) return;
 
-        // Posición orbital base (elipse levemente achatada verticalmente)
-        const angle = icon.phase + t * icon.speed;
-        let ox = Math.cos(angle) * icon.radius;
-        let oy = Math.sin(angle) * icon.radius * 0.55;
+        // Oscilación orgánica: X e Y con frecuencias y fases distintas
+        const ox = Math.sin(t * icon.freqX + icon.phaseX) * icon.ampX;
+        const oy = Math.cos(t * icon.freqY + icon.phaseY) * icon.ampY;
 
-        // Posición absoluta del ícono
-        const ix = cx + ox;
-        const iy = cy + oy;
+        // Posición base en pantalla
+        const baseScreenX = (icon.baseX / 100) * window.innerWidth;
+        const baseScreenY = (icon.baseY / 100) * window.innerHeight;
+        const ix = baseScreenX + ox;
+        const iy = baseScreenY + oy;
 
         // Repulsión del mouse
+        let rx = 0, ry = 0;
         const dx = ix - mouse.current.x;
         const dy = iy - mouse.current.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
         if (dist < REPEL_RADIUS && dist > 0) {
           const force = (REPEL_RADIUS - dist) / REPEL_RADIUS;
-          ox += (dx / dist) * force * REPEL_STRENGTH;
-          oy += (dy / dist) * force * REPEL_STRENGTH;
+          rx = (dx / dist) * force * REPEL_STRENGTH;
+          ry = (dy / dist) * force * REPEL_STRENGTH;
         }
 
-        el.style.transform = `translate(${ox}px, ${oy}px)`;
+        el.style.left = `${icon.baseX}%`;
+        el.style.top = `${icon.baseY}%`;
+        el.style.transform = `translate(calc(-50% + ${ox + rx}px), calc(-50% + ${oy + ry}px))`;
       });
 
       raf = requestAnimationFrame(loop);
@@ -82,49 +94,45 @@ export default function Home() {
 
       {/* Fondo degradado */}
       <div className="absolute inset-0 bg-white pointer-events-none">
-        <div className="absolute w-[60vw] h-[60vw] rounded-full opacity-40"
+        <div className="absolute w-[65vw] h-[65vw] rounded-full opacity-40"
           style={{ background: 'radial-gradient(circle, #a8b8f8 0%, #c5d0fa 40%, transparent 70%)', bottom: '-15%', left: '-12%' }} />
-        <div className="absolute w-[55vw] h-[55vw] rounded-full opacity-40"
+        <div className="absolute w-[58vw] h-[58vw] rounded-full opacity-40"
           style={{ background: 'radial-gradient(circle, #f08080 0%, #f5a0a0 40%, transparent 70%)', top: '-12%', right: '-10%' }} />
       </div>
 
-      {/* Contenedor central — íconos orbitan alrededor de este punto */}
-      <div className="relative z-10 flex flex-col items-center text-center px-4">
+      {/* Íconos flotantes — posición fija + oscilación */}
+      {ICONS.map((icon, i) => (
+        <div
+          key={icon.src}
+          ref={(el) => { iconRefs.current[i] = el; }}
+          className="absolute pointer-events-none"
+          style={{ width: icon.size, height: icon.size }}
+        >
+          <Image src={icon.src} alt={icon.alt} width={icon.size} height={icon.size} className="w-full h-full drop-shadow-md" />
+        </div>
+      ))}
 
-        {/* Punto de referencia para las órbitas */}
-        <div ref={containerRef} className="relative flex items-center justify-center mb-8">
+      {/* Contenido central — z-index alto para estar siempre encima */}
+      <div className="relative z-20 flex flex-col items-center text-center px-4">
 
-          {/* Íconos flotantes — posicionados en el centro y movidos por JS */}
-          {ICONS.map((icon, i) => (
-            <div
-              key={icon.src}
-              ref={(el) => { iconRefs.current[i] = el; }}
-              className="absolute pointer-events-none"
-              style={{ width: icon.size, height: icon.size, marginLeft: -icon.size / 2, marginTop: -icon.size / 2 }}
-            >
-              <Image src={icon.src} alt={icon.alt} width={icon.size} height={icon.size} className="w-full h-full drop-shadow-md" />
-            </div>
-          ))}
-
-          {/* Logo: texto KiVO + elefante lado a lado */}
-          <div className="flex items-center gap-2 select-none">
-            <Image
-              src="/assets/LOGO.svg"
-              alt="Kivo"
-              width={180}
-              height={72}
-              priority
-              className="w-36 sm:w-48 h-auto"
-            />
-            <Image
-              src="/assets/personaje principal.svg"
-              alt="Personaje Kivo"
-              width={130}
-              height={130}
-              priority
-              className="w-28 sm:w-36 h-auto drop-shadow-lg -ml-2"
-            />
-          </div>
+        {/* Logo: texto KiVO + elefante lado a lado */}
+        <div className="flex items-center justify-center gap-1 mb-8 select-none">
+          <Image
+            src="/assets/LOGO.svg"
+            alt="Kivo"
+            width={260}
+            height={104}
+            priority
+            className="w-52 sm:w-64 md:w-72 h-auto"
+          />
+          <Image
+            src="/assets/personaje principal.svg"
+            alt="Personaje Kivo"
+            width={180}
+            height={180}
+            priority
+            className="w-36 sm:w-44 md:w-52 h-auto drop-shadow-lg -ml-3"
+          />
         </div>
 
         {/* Badge amarilla */}
