@@ -8,37 +8,40 @@ import { useEffect, useRef } from 'react';
 const ICONS = [
   {
     src: '/assets/calculadora de pagos.svg', alt: 'Calculadora', size: 70,
-    baseX: 10, baseY: 18,
+    baseX: 18, baseY: 22,
     ampX: 8, ampY: 10, freqX: 0.0008, freqY: 0.0006, phaseX: 0, phaseY: 1.2,
   },
   {
     src: '/assets/creador de cotizaciones.svg', alt: 'Cotizaciones', size: 60,
-    baseX: 78, baseY: 12,
+    baseX: 72, baseY: 18,
     ampX: 10, ampY: 8, freqX: 0.0007, freqY: 0.0009, phaseX: 2.1, phaseY: 0.5,
   },
   {
     src: '/assets/calculadora de precios.svg', alt: 'Precios', size: 65,
-    baseX: 84, baseY: 62,
+    baseX: 78, baseY: 65,
     ampX: 9, ampY: 12, freqX: 0.0006, freqY: 0.0007, phaseX: 1.0, phaseY: 2.8,
   },
   {
     src: '/assets/convertidor de archivos.svg', alt: 'Archivos', size: 58,
-    baseX: 8, baseY: 68,
+    baseX: 16, baseY: 70,
     ampX: 11, ampY: 9, freqX: 0.0009, freqY: 0.0005, phaseX: 3.5, phaseY: 1.8,
   },
   {
     src: '/assets/buscador de clientes.svg', alt: 'Clientes', size: 64,
-    baseX: 50, baseY: 82,
+    baseX: 50, baseY: 80,
     ampX: 8, ampY: 11, freqX: 0.0005, freqY: 0.0008, phaseX: 1.7, phaseY: 0.3,
   },
 ];
 
-const REPEL_RADIUS = 100;
-const REPEL_STRENGTH = 35;
+const REPEL_RADIUS = 120;
+const REPEL_STRENGTH = 28;
+const LERP = 0.04; // suavizado: más bajo = más lento y suave
 
 export default function Home() {
   const iconRefs = useRef<(HTMLDivElement | null)[]>([]);
   const mouse = useRef({ x: -9999, y: -9999 });
+  // Offset de repulsión actual (interpolado suavemente) para cada ícono
+  const repelCurrent = useRef(ICONS.map(() => ({ x: 0, y: 0 })));
 
   useEffect(() => {
     const onMouseMove = (e: MouseEvent) => { mouse.current = { x: e.clientX, y: e.clientY }; };
@@ -62,20 +65,25 @@ export default function Home() {
         const ix = baseScreenX + ox;
         const iy = baseScreenY + oy;
 
-        // Repulsión del mouse
-        let rx = 0, ry = 0;
+        // Repulsión objetivo (cuánto debería alejarse)
+        let targetRx = 0, targetRy = 0;
         const dx = ix - mouse.current.x;
         const dy = iy - mouse.current.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
         if (dist < REPEL_RADIUS && dist > 0) {
           const force = (REPEL_RADIUS - dist) / REPEL_RADIUS;
-          rx = (dx / dist) * force * REPEL_STRENGTH;
-          ry = (dy / dist) * force * REPEL_STRENGTH;
+          targetRx = (dx / dist) * force * REPEL_STRENGTH;
+          targetRy = (dy / dist) * force * REPEL_STRENGTH;
         }
+
+        // Lerp: suavizar el movimiento de repulsión
+        const cur = repelCurrent.current[i];
+        cur.x += (targetRx - cur.x) * LERP;
+        cur.y += (targetRy - cur.y) * LERP;
 
         el.style.left = `${icon.baseX}%`;
         el.style.top = `${icon.baseY}%`;
-        el.style.transform = `translate(calc(-50% + ${ox + rx}px), calc(-50% + ${oy + ry}px))`;
+        el.style.transform = `translate(calc(-50% + ${ox + cur.x}px), calc(-50% + ${oy + cur.y}px))`;
       });
 
       raf = requestAnimationFrame(loop);
