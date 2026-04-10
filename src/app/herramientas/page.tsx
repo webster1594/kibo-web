@@ -43,10 +43,18 @@ const herramientas = [
 
 export default function HerramientasPage() {
   return (
-    <div className="min-h-screen bg-white overflow-x-hidden">
+    <div className="relative min-h-screen bg-white overflow-x-hidden">
+
+      {/* Fondo degradado — igual que home */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute w-[65vw] h-[65vw] rounded-full opacity-40"
+          style={{ background: 'radial-gradient(circle, #a8b8f8 0%, #c5d0fa 40%, transparent 70%)', bottom: '-15%', left: '-12%' }} />
+        <div className="absolute w-[58vw] h-[58vw] rounded-full opacity-40"
+          style={{ background: 'radial-gradient(circle, #f08080 0%, #f5a0a0 40%, transparent 70%)', top: '-12%', right: '-10%' }} />
+      </div>
 
       {/* Header flotante sobre el fondo */}
-      <div className="px-4 pt-4">
+      <div className="relative z-10 px-4 pt-4">
         <header className="max-w-5xl mx-auto bg-white rounded-2xl shadow-md px-6 py-4 flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex-shrink-0">
@@ -72,7 +80,7 @@ export default function HerramientasPage() {
       </div>
 
       {/* Main Content */}
-      <main className="max-w-5xl mx-auto py-10 px-4">
+      <main className="relative z-10 max-w-5xl mx-auto py-10 px-4">
 
         {/* Botón volver */}
         <Link
