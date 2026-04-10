@@ -17,14 +17,15 @@ interface Comision {
 const PAISES = ['Argentina', 'México', 'Colombia', 'Perú', 'Chile'];
 
 export default function CalculadoraPagos() {
-  const [paisSeleccionado, setPaisSeleccionado] = useState('Argentina');
+  const [paisSeleccionado, setPaisSeleccionado] = useState('');
   const [plataformaSeleccionada, setPlataformaSeleccionada] = useState('');
   const [comisiones, setComisiones] = useState<Comision[]>([]);
-  const [montoRecibir, setMontoRecibir] = useState('100');
-  const [montoEnviar, setMontoEnviar] = useState('100');
-  const [cargando, setCargando] = useState(true);
+  const [montoRecibir, setMontoRecibir] = useState('0');
+  const [montoEnviar, setMontoEnviar] = useState('0');
+  const [cargando, setCargando] = useState(false);
 
   useEffect(() => {
+    if (!paisSeleccionado) return;
     async function cargarComisiones() {
       setCargando(true);
       const { data, error } = await supabase
@@ -77,32 +78,39 @@ export default function CalculadoraPagos() {
           style={{ background: 'radial-gradient(circle, #f08080 0%, #f5a0a0 40%, transparent 70%)', top: '-20%', right: '-20%' }} />
       </div>
 
-      {/* Header */}
-      <header className="relative z-20 flex items-center justify-between px-5 pt-5 pb-2">
-        <Link href="/">
-          <Image
-            src="/assets/LOGO.svg"
-            alt="Kivo"
-            width={100}
-            height={40}
-            className="w-20 sm:w-24 h-auto"
-          />
-        </Link>
-        <Link
-          href="/herramientas"
-          className="flex items-center gap-1.5 text-gray-600 hover:text-black text-sm font-medium transition-colors"
-        >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-          Volver
-        </Link>
-      </header>
+      {/* Header flotante — igual que herramientas */}
+      <div className="relative z-20 px-4 pt-4">
+        <header className="max-w-5xl mx-auto bg-white rounded-2xl shadow-md px-6 py-4 flex items-center justify-between">
+          <Link href="/" className="flex-shrink-0">
+            <Image
+              src="/assets/LOGO.svg"
+              alt="Kivo"
+              width={110}
+              height={44}
+              className="w-24 sm:w-28 h-auto"
+            />
+          </Link>
+          <nav className="flex items-center gap-6">
+            <Link href="/blog" className="text-gray-600 hover:text-black font-medium text-sm sm:text-base transition-colors">Blog</Link>
+            <Link href="/nosotros" className="text-gray-600 hover:text-black font-medium text-sm sm:text-base transition-colors">Nosotros</Link>
+          </nav>
+        </header>
+      </div>
 
       {/* Contenido */}
-      <div className="relative z-10 flex-1 flex flex-col items-center justify-start px-4 pt-4 pb-10">
+      <div className="relative z-10 flex-1 flex flex-col items-center justify-start px-4 pt-5 pb-10">
 
-        {/* Personaje principal — bien arriba, antes de los selectores */}
+        {/* Botón volver */}
+        <div className="w-full max-w-md mb-4">
+          <Link href="/herramientas" className="inline-flex items-center gap-1.5 text-gray-500 hover:text-black text-sm font-medium transition-colors">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Volver
+          </Link>
+        </div>
+
+        {/* Personaje principal */}
         <div className="flex justify-center mb-4">
           <Image
             src="/assets/personaje principal.svg"
@@ -124,6 +132,7 @@ export default function CalculadoraPagos() {
               onChange={(e) => setPaisSeleccionado(e.target.value)}
               className="bg-white border-0 rounded-2xl px-4 py-3 font-bold text-gray-800 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-300 text-sm sm:text-base"
             >
+              <option value="" disabled>País</option>
               {PAISES.map((pais) => (
                 <option key={pais} value={pais}>{pais}</option>
               ))}
@@ -132,9 +141,10 @@ export default function CalculadoraPagos() {
             <select
               value={plataformaSeleccionada}
               onChange={(e) => setPlataformaSeleccionada(e.target.value)}
-              disabled={cargando || comisiones.length === 0}
+              disabled={!paisSeleccionado || cargando || comisiones.length === 0}
               className="bg-white border-0 rounded-2xl px-4 py-3 font-bold text-gray-800 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:opacity-50 text-sm sm:text-base"
             >
+              <option value="" disabled>Plataforma</option>
               {comisiones.map((c) => (
                 <option key={c.plataforma} value={c.plataforma}>{c.plataforma}</option>
               ))}
