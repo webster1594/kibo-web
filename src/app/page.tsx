@@ -116,7 +116,7 @@ export default function Home() {
           className="absolute pointer-events-none"
           style={{ width: icon.size, height: icon.size }}
         >
-          <Image src={icon.src} alt={icon.alt} width={icon.size} height={icon.size} className="w-full h-full drop-shadow-md" />
+          <Image src={icon.src} alt={icon.alt} width={icon.size} height={icon.size} className="w-full h-full" />
         </div>
       ))}
 
