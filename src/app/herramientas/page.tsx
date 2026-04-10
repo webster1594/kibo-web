@@ -98,10 +98,10 @@ export default function HerramientasPage() {
                   <Image src={h.imagen} alt={h.nombre} width={80} height={80} className="w-full h-full" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h2 className="text-lg sm:text-2xl font-bold text-black mb-1 truncate">{h.nombre}</h2>
-                  <p className="text-gray-500 text-sm sm:text-base leading-snug">{h.descripcion}</p>
+                  <h2 className="text-base sm:text-2xl font-bold text-black mb-1 leading-tight">{h.nombre}</h2>
+                  <p className="text-gray-500 text-xs sm:text-base leading-snug">{h.descripcion}</p>
                 </div>
-                <div className="flex-shrink-0 bg-black text-white font-bold px-4 py-2 sm:px-6 sm:py-3 rounded-xl text-sm group-hover:bg-gray-800 transition-colors">
+                <div className="flex-shrink-0 bg-black text-white font-bold px-3 py-2 sm:px-6 sm:py-3 rounded-xl text-xs sm:text-sm group-hover:bg-gray-800 transition-colors whitespace-nowrap">
                   Usar →
                 </div>
               </Link>
@@ -114,8 +114,8 @@ export default function HerramientasPage() {
                   <Image src={h.imagen} alt={h.nombre} width={80} height={80} className="w-full h-full" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h2 className="text-lg sm:text-2xl font-bold text-black mb-1 truncate">{h.nombre}</h2>
-                  <p className="text-gray-500 text-sm sm:text-base leading-snug">{h.descripcion}</p>
+                  <h2 className="text-base sm:text-2xl font-bold text-black mb-1 leading-tight">{h.nombre}</h2>
+                  <p className="text-gray-500 text-xs sm:text-base leading-snug">{h.descripcion}</p>
                 </div>
                 <span className="flex-shrink-0 text-gray-400 text-xs sm:text-sm font-medium whitespace-nowrap">
                   Próximamente
