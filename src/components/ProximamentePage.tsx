@@ -113,11 +113,6 @@ export default function ProximamentePage({ titulo }: Props) {
       {/* Contenido central */}
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-4 -mt-16">
 
-        <div className="flex items-center justify-center gap-1 mb-8 select-none">
-          <Image src="/assets/LOGO.svg" alt="Kivo" width={160} height={64} priority className="w-32 sm:w-40 h-auto" />
-          <Image src="/assets/personaje principal.svg" alt="Personaje Kivo" width={110} height={110} priority className="w-24 sm:w-28 h-auto -ml-2" />
-        </div>
-
         <h1 className="text-4xl sm:text-5xl font-black text-gray-900 mb-3">{titulo}</h1>
         <p className="text-gray-500 text-base sm:text-lg mb-8">Estamos trabajando en esto. ¡Vuelve pronto!</p>
 
