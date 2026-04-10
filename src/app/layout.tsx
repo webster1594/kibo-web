@@ -30,6 +30,12 @@ export default function RootLayout({
     >
       <head>
         <link rel="icon" href="/assets/LOGO.svg" />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Kivo" />
+        <meta name="theme-color" content="#ffffff" />
       </head>
       <body className="min-h-screen flex flex-col bg-white">{children}</body>
     </html>

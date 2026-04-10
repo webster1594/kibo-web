@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect, useRef } from 'react';
+import InstallButton from '@/components/InstallButton';
 
 // Posición fija (% de pantalla) + parámetros de oscilación independientes para X e Y
 const ICONS = [
@@ -158,6 +159,9 @@ export default function Home() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
           </svg>
         </Link>
+
+        {/* Botón instalar PWA — solo aparece en móvil si el browser lo soporta */}
+        <InstallButton />
       </div>
     </div>
   );
