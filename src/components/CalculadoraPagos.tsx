@@ -67,14 +67,14 @@ export default function CalculadoraPagos() {
   const resultsSiEnvias = calcularSiEnvias();
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-white flex flex-col">
+    <div className="relative bg-white flex flex-col" style={{ minHeight: '100dvh' }}>
 
-      {/* Fondo degradado — igual que home */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute w-[65vw] h-[65vw] rounded-full opacity-40"
-          style={{ background: 'radial-gradient(circle, #a8b8f8 0%, #c5d0fa 40%, transparent 70%)', bottom: '-15%', left: '-12%' }} />
-        <div className="absolute w-[58vw] h-[58vw] rounded-full opacity-40"
-          style={{ background: 'radial-gradient(circle, #f08080 0%, #f5a0a0 40%, transparent 70%)', top: '-12%', right: '-10%' }} />
+      {/* Fondo degradado — cubre toda la pantalla incluyendo scroll */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute w-[120vw] h-[120vw] sm:w-[65vw] sm:h-[65vw] rounded-full opacity-40"
+          style={{ background: 'radial-gradient(circle, #a8b8f8 0%, #c5d0fa 40%, transparent 70%)', bottom: '-20%', left: '-20%' }} />
+        <div className="absolute w-[110vw] h-[110vw] sm:w-[58vw] sm:h-[58vw] rounded-full opacity-40"
+          style={{ background: 'radial-gradient(circle, #f08080 0%, #f5a0a0 40%, transparent 70%)', top: '-20%', right: '-20%' }} />
       </div>
 
       {/* Header */}
@@ -99,17 +99,17 @@ export default function CalculadoraPagos() {
         </Link>
       </header>
 
-      {/* Blob gigante + calculadora encima */}
-      <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-4 pb-8">
+      {/* Contenido */}
+      <div className="relative z-10 flex-1 flex flex-col items-center justify-start px-4 pt-4 pb-10">
 
-        {/* Personaje principal encima de la card */}
-        <div className="flex justify-center -mb-6 relative z-20">
+        {/* Personaje principal — bien arriba, antes de los selectores */}
+        <div className="flex justify-center mb-4">
           <Image
             src="/assets/personaje principal.svg"
             alt="Personaje Kivo"
-            width={140}
-            height={140}
-            className="w-28 sm:w-36 h-auto drop-shadow-lg"
+            width={150}
+            height={150}
+            className="w-28 sm:w-36 h-auto"
             priority
           />
         </div>
